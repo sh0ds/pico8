@@ -3,3 +3,4 @@
 *.bin/
 *.p8.png
 build/
+*.zip
