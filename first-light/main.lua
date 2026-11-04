@@ -6,7 +6,8 @@ player = {
     x = 64,
     y = 64,
     speed = 30,
-    sprite = 0
+    sprite = 0,
+    width = 8
 }
 
 framerate = 30
@@ -16,7 +17,7 @@ framerate = 30
 --]]
 
 function _init()
-    cls()
+
 end
 
 function _update()
@@ -41,6 +42,6 @@ function move_player()
     if btn(2) then player.y -= step end
     if btn(3) then player.y += step end
 
-    player.x = mid(0,player.x,120)
-    player.y = mid(0,player.y,120)
+    player.x = mid(0, player.x, 128 - player.width)
+    player.y = mid(0, player.y, 128 - player.width)
 end
