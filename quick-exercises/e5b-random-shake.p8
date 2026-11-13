@@ -31,7 +31,7 @@ end
 
 function _draw()
     cls(0)
-    
+
     local ox = rnd(shake) - shake/2
     local oy = rnd(shake) - shake/2
     camera(ox, oy)
@@ -43,10 +43,10 @@ end
 
 function add_part(x, y, dx, dy, life)
     add(parts, {
-        x = x, 
-        y = y, 
-        dx = dx, 
-        dy = dy, 
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
         life = life,
         s_life = life
     })
@@ -69,7 +69,7 @@ function draw_parts()
     color(7)
     for i=1,#parts do
         local radius = 2 * parts[i].life / parts[i].s_life
-        if radius >= 1 then    
+        if radius >= 1 then
             circfill(parts[i].x, parts[i].y, radius)
         else
             pset(parts[i].x, parts[i].y)
