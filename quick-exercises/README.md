@@ -262,6 +262,8 @@ end
 
 Learned: a list keeps its order, `pairs` over names doesn't. `sub(s, i, i)` returns one character, and it's a string (`"1"`, not `1`). Grid to pixel is `(j - 1) * 8`, and pixel to grid is `flr(px / 8) + 1`. Check before moving, X and Y separately, and check the edges of the dot, not its centre. Don't name a table `map`. For P3: `mget` and `fget` replace `sub` and `== "1"`, and PICO-8's map starts at 0, so drop the `+ 1`. Open question for P5: why is diagonal movement faster?
 
+**Your variant** (`e7-grid-movement.p8`): the same code with scattered pillars instead of one wall, the dot renamed `circ`, speed 0.5 and radius 4. Careful: `circ` is a PICO-8 drawing function, the same trap as `del` and `map`, so a table with that name hides it.
+
 ### L4 · Removing while looping (2026-11-12)
 
 ```lua
