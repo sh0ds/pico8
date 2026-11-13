@@ -1,6 +1,6 @@
 # Pocket exercises: 10 to 15 minutes on any PC
 
-Small exercises I do on my work PC in spare minutes, in the browser (lua.org demo and pico-8-edu.com). My solutions are in this folder: `lua/` for the plain Lua ones, a `.p8` cart for each PICO-8 one (`e3-flash.p8`, `e4-particles.p8`, `e5-shake.p8`, `e5b-random-shake.p8`, `e7-grid.p8`). Load a cart with `load quick-exercises/e4-particles.p8`.
+Small exercises I do on my work PC in spare minutes, in the browser (lua.org demo and pico-8-edu.com). My solutions are in this folder: `lua/` for the plain Lua ones, a `.p8` cart for each PICO-8 one (`e3-flash.p8`, `e4-particles.p8`, `e5-shake.p8`, `e5b-random-shake.p8`, `e7-grid.p8`, `e9-coin.p8`). Load a cart with `load quick-exercises/e4-particles.p8`.
 
 For free moments away from home, on a PC where you can't install anything. These aren't plan steps and don't replace a sitting: they make the next sitting faster. Every one practises something a real step needs, and the step is named so you know why.
 
@@ -507,3 +507,31 @@ end
 ```
 
 Learned: `shake` is the strength and fades in `_update` by multiplying, so it hits hard and calms down smoothly. The offset is worked out from it in `_draw`, separately for x and y. `rnd(0)` is 0, so no `if` is needed. The `tick = 0` at the top is left over.
+
+### E9 · A coin that spins (2026-11-13)
+
+```lua
+tick = 0
+
+function _init()
+
+end
+
+function _update()
+    tick = tick + 1
+    w = max(1,abs(cos(tick / 40)) * 8)
+    x0 = 64 - (w / 2)
+    x1 = 64 + (w / 2)
+    y0 = (sin(tick / 40) * 2) + 60
+    y1 = (sin(tick / 40) * 2) + 68
+end
+
+function _draw()
+	cls(0)
+	print("tick: "..tick, 2, 2)
+	print("width: "..w,2,10)
+	ovalfill(x0, y0, x1, y1, 10)
+end
+```
+
+Learned: a bigger divisor in `cos(tick / 40)` means a slower spin. `abs` mirrors the negative half, so the coin shows its edge twice per turn, like a real one. `max(1, ...)` keeps it from vanishing. Centre first, then go out by half the width each way: `64 - w/2` and `64 + w/2`. `sin` only goes from -1 to 1, so multiply it for a visible bob. Still to try: three coins out of step.
