@@ -1,6 +1,6 @@
 # Pocket exercises: 10 to 15 minutes on any PC
 
-Small exercises I do on my work PC in spare minutes, in the browser (lua.org demo and pico-8-edu.com). My solutions are in this folder: `lua/` for the plain Lua ones, a `.p8` cart for each PICO-8 one (`e3-flash.p8`, `e4-particles.p8`, `e5-shake.p8`, `e5b-random-shake.p8`, `e7-grid.p8`). Load a cart with `load quick-exercises/e4-particles.p8`.
+Small exercises I do on my work PC in spare minutes, in the browser (lua.org demo and pico-8-edu.com). My solutions are in this folder: `lua/` for the plain Lua ones, a `.p8` cart for each PICO-8 one (`e3-flash.p8`, `e4-particles.p8`, `e5-shake.p8`, `e5b-random-shake.p8`, `e7-grid.p8`, and `e7-grid-movement.p8`, my own variant of E7). Load a cart with `load quick-exercises/e4-particles.p8`.
 
 For free moments away from home, on a PC where you can't install anything. These aren't plan steps and don't replace a sitting: they make the next sitting faster. Every one practises something a real step needs, and the step is named so you know why.
 
