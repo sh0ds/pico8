@@ -15,11 +15,11 @@ function tick_fx()
 end
 for i=0,frames do
     print("frame "..i)
-    if i == 2 then 
-        fx["flash"] = 2 
+    if i == 2 then
+        fx["flash"] = 2
     end
-    if i == 5 then 
-        fx["pop"] = 8 
+    if i == 5 then
+        fx["pop"] = 8
     end
-    tick_fx(12)
+    tick_fx()
 end
