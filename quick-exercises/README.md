@@ -17,6 +17,9 @@ A table of effect timers (`flash`, `pop`) that count down by one every frame, si
 **L4 · Removing while looping** (`lua/l4-removing.lua`)
 Ten particles losing one life per frame, the dead ones get removed inside the loop. Going up skips items, because `table.remove` shifts everything after it down. Going backwards fixes it: those items were already visited. A `for` only counts down if you give it a third number (`-1`), and changing the loop variable inside a `for` does nothing. Test with dead items right next to each other, like `{1, 1, 1, 2, 2, 3}`.
 
+**L6 · Eight flags in one number** (`lua/l6-flags.lua`)
+Three yes/no facts (door 1 open, key 3 taken, boss beaten) packed into one number, one bit each. `1 << i` is a mask with a single 1 at bit `i`. `|` turns that bit on and leaves the rest alone, so setting it twice changes nothing. `&` keeps only that bit, anything that isn't 0 means on. `~mask` flips every bit, so `n & ~mask` clears just that one. Brackets around `n & mask` before `~= 0`. All three set gives 137 (1 + 8 + 128).
+
 ## PICO-8
 
 **E3 · A moment of colour** (`e3-flash.p8`)
@@ -41,5 +44,4 @@ An oval whose width follows `abs(cos(tick / 40))`, so it looks like a turning co
 
 - L2 · my own `mid`, without `math.min` or `math.max`
 - L5 · splitting a number into digits with only `%` and `//`
-- L6 · eight flags packed into one number
 - E8 · wavy text, letter by letter
