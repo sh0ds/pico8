@@ -1,6 +1,6 @@
 function clamp(lo, x, hi)
     if lo > hi then
-        c=lo; lo=hi; hi=c
+        lo, hi = hi, lo
     end
     if x < lo then
         return lo
