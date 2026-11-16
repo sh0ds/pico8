@@ -43,9 +43,8 @@ E5 with a random shake. `shake` is the strength and gets multiplied by 0.8 every
 **E7 · A map without the map editor** (`e7-grid.p8`)
 A 16×16 map written as strings of 0s and 1s, drawn as 8×8 squares, and a dot that can't go into walls. `sub(s, i, i)` gives back one character, and it's a string (`"1"`, not `1`). Grid to pixel is `(j - 1) * 8`, pixel to grid is `flr(px / 8) + 1`. Check before moving, x and y separately, so you slide along walls instead of sticking. And check the edges of the dot, not its centre. Don't name a table `map`.
 
+**E8 · Wavy text** (`e8-wavy.p8`)
+A line of text, centred, every letter bobbing up and down on its own. A letter is 3 pixels wide plus a 1 pixel gap, so the word is `4 * #str - 1` wide and starts at `64 - l / 2`. `sub(str, i, i)` prints one letter at a time, 4 pixels apart. Each letter's y gets `sin(tick/30 + i/8) * 2`: the `i/8` shifts every letter a little, so the wave runs through the word instead of everything moving together. Without the `* 2` it's one pixel and you barely see it.
+
 **E9 · A coin that spins** (`e9-coin.p8`)
 An oval whose width follows `abs(cos(tick / 40))`, so it looks like a turning coin. Bigger number, slower spin. `abs` mirrors the negative half, so the coin shows its edge twice per turn, like a real one. `max(1, ...)` keeps it from disappearing. Centre first, then half the width out each way. `sin` only goes from -1 to 1, so multiply it to get a bob you can see.
-
-## Still to do
-
-- E8 · wavy text, letter by letter
