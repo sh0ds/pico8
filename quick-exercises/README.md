@@ -11,6 +11,9 @@ My solutions are in here: the plain Lua ones in `lua/`, and one `.p8` cart for e
 **L1 · Borders** (`lua/l1-borders.lua`)
 A list of five items, the third one gets removed, and everything after it moves down by one, by hand. No `if` needed: reading one past the end gives `nil`, so the last step clears the last slot by itself. `t[3] = nil` is a trap in a list, which is why PICO-8 has `del`. And `del` is a PICO-8 function, so don't use it as a variable name in a cart.
 
+**L2 · Your own `mid`** (`lua/l2-clamp.lua`)
+A `clamp(lo, x, hi)` without `math.min` or `math.max`, just `if`s. Below the range gives `lo`, above gives `hi`, inside gives `x`. If `lo` and `hi` come in the wrong way round, swap them first and the same three cases work again. That's why PICO-8's `mid` doesn't care about the order: it gives back whichever of the three is in the middle.
+
 **L3 · Countdown timers** (`lua/l3-timers.lua`)
 A table of effect timers (`flash`, `pop`) that count down by one every frame, simulated for 12 frames. Write through `fx[key]`, because `value` is only a copy. Check first, then subtract, and only above 0. One call per frame, the frame loop stays outside.
 
@@ -42,6 +45,5 @@ An oval whose width follows `abs(cos(tick / 40))`, so it looks like a turning co
 
 ## Still to do
 
-- L2 · my own `mid`, without `math.min` or `math.max`
 - L5 · splitting a number into digits with only `%` and `//`
 - E8 · wavy text, letter by letter
