@@ -29,6 +29,9 @@ Three yes/no facts (door 1 open, key 3 taken, boss beaten) packed into one numbe
 **L7 · Speed that levels off** (`lua/l7-drag.lua`)
 60 frames of holding right: a push every frame and drag that takes 10% of the speed. Push first, then drag: the drag also eats 10% of that frame's push, so it levels off at 1.8 instead of 2. Drag first, then push: the push survives whole, and it creeps up to 2. Each frame closes 10% of the remaining gap, so it never quite gets there, which you can't see after about 30 frames. `accel = drag * top_speed` is only exact in the drag-first order.
 
+**L8 · A jump in numbers** (`lua/l8-jump.lua`)
+A jump 24 pixels high that takes 20 frames to the top, worked out and then simulated, in both orders. `g = 2h / t²` and `v = 2h / t` assume the speed drops smoothly. Moving in whole frames, the order decides: gravity first never moves the full first step and tops out at 22.8, move first starts with the full step and tops out at 25.2. 24 is exactly in the middle (that's what adding `g/2` to the start does). Nobody sees 1.2 pixels, so tune by eye.
+
 ## PICO-8
 
 **E3 · A moment of colour** (`e3-flash.p8`)
