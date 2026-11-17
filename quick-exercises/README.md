@@ -63,3 +63,6 @@ An oval whose width follows `abs(cos(tick / 40))`, so it looks like a turning co
 
 **E10 · A dot with weight** (`e10-weight.p8`)
 ⬅️ and ➡️ push a dot that speeds up, slides and slows down. `v` carries the direction (negative is left), and `dir` (-1, 0 or 1) is the only thing the buttons touch. Drag and moving run every frame, so the dot slides on after you let go: that slide is the weight. Drag first, then the push, then move. A second drag value, `brake`, takes over when no key is held, so speeding up and stopping are tuned separately. A value can't use its own table while the table is being built, so `accel` is set on the line after.
+
+**E11 · Gravity and a floor** (`e11-gravity.p8`)
+A dot falls onto a floor, and ❎ jumps, but only while it's standing. `g` goes on `vy` every frame and `vy` goes on `y`, so one push up (`vy = -4`) becomes a whole arc. The floor check puts the dot back on top (118 minus the radius, so 114), sets `vy` to 0 and `grounded` to true. Jumping only works while grounded, and the jump itself sets `grounded` back to false, so gravity runs again.
