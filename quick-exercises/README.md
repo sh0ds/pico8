@@ -32,6 +32,9 @@ Three yes/no facts (door 1 open, key 3 taken, boss beaten) packed into one numbe
 **L8 · A jump in numbers** (`lua/l8-jump.lua`)
 A jump 24 pixels high that takes 20 frames to the top, worked out and then simulated, in both orders. `g = 2h / t²` and `v = 2h / t` assume the speed drops smoothly. Moving in whole frames, the order decides: gravity first never moves the full first step and tops out at 22.8, move first starts with the full step and tops out at 25.2. 24 is exactly in the middle (that's what adding `g/2` to the start does). Nobody sees 1.2 pixels, so tune by eye.
 
+**L9 · Three states, no giant `if`** (`lua/l9-states.lua`)
+Title, play, game over and pause, driven by a list of fake inputs, one per frame. Each state is a table with its own `update` function and only knows its own rules and where it goes next. Switching is one line, `state = states.play`. Adding `pause` only touched `play`, the one state that leads into it; `title` and `over` stayed exactly as they were. A function can name `states.play` before it exists, because Lua looks it up when the function runs.
+
 ## PICO-8
 
 **E3 · A moment of colour** (`e3-flash.p8`)
