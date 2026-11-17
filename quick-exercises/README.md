@@ -35,6 +35,9 @@ A jump 24 pixels high that takes 20 frames to the top, worked out and then simul
 **L9 · Three states, no giant `if`** (`lua/l9-states.lua`)
 Title, play, game over and pause, driven by a list of fake inputs, one per frame. Each state is a table with its own `update` function and only knows its own rules and where it goes next. Switching is one line, `state = states.play`. Adding `pause` only touched `play`, the one state that leads into it; `title` and `over` stayed exactly as they were. A function can name `states.play` before it exists, because Lua looks it up when the function runs.
 
+**L10 · A scripted moment** (`lua/l10-cutscene.lua`)
+A little door cutscene as a coroutine, one step per frame. `coroutine.yield()` pauses the function right there, and the next `coroutine.resume` carries on from the same line, loops and all. So the cutscene reads like a script: creak three times, open twice, done, with no frame counter. After "done" the coroutine is `dead`, and resuming it does nothing (it just returns false). In PICO-8 the same thing is `cocreate`, `coresume` and `costatus`.
+
 ## PICO-8
 
 **E3 · A moment of colour** (`e3-flash.p8`)
