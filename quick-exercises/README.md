@@ -26,6 +26,9 @@ A number turned into a table of its digits, using only `%` and `//`, no `tostrin
 **L6 · Eight flags in one number** (`lua/l6-flags.lua`)
 Three yes/no facts (door 1 open, key 3 taken, boss beaten) packed into one number, one bit each. `1 << i` is a mask with a single 1 at bit `i`. `|` turns that bit on and leaves the rest alone, so setting it twice changes nothing. `&` keeps only that bit, anything that isn't 0 means on. `~mask` flips every bit, so `n & ~mask` clears just that one. Brackets around `n & mask` before `~= 0`. All three set gives 137 (1 + 8 + 128).
 
+**L7 · Speed that levels off** (`lua/l7-drag.lua`)
+60 frames of holding right: a push every frame and drag that takes 10% of the speed. Push first, then drag: the drag also eats 10% of that frame's push, so it levels off at 1.8 instead of 2. Drag first, then push: the push survives whole, and it creeps up to 2. Each frame closes 10% of the remaining gap, so it never quite gets there, which you can't see after about 30 frames. `accel = drag * top_speed` is only exact in the drag-first order.
+
 ## PICO-8
 
 **E3 · A moment of colour** (`e3-flash.p8`)
