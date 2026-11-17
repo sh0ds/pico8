@@ -19,7 +19,7 @@ end
 
 function _draw()
     cls()
-    circfill(dot.x, dot.y, dot.r)
+    circfill(dot.x, dot.y, dot.r, 7)
 end
 
 function move_dot()
