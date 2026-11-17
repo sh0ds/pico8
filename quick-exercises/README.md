@@ -60,3 +60,6 @@ A line of text, centred, every letter bobbing up and down on its own. A letter i
 
 **E9 · A coin that spins** (`e9-coin.p8`)
 An oval whose width follows `abs(cos(tick / 40))`, so it looks like a turning coin. Bigger number, slower spin. `abs` mirrors the negative half, so the coin shows its edge twice per turn, like a real one. `max(1, ...)` keeps it from disappearing. Centre first, then half the width out each way. `sin` only goes from -1 to 1, so multiply it to get a bob you can see.
+
+**E10 · A dot with weight** (`e10-weight.p8`)
+⬅️ and ➡️ push a dot that speeds up, slides and slows down. `v` carries the direction (negative is left), and `dir` (-1, 0 or 1) is the only thing the buttons touch. Drag and moving run every frame, so the dot slides on after you let go: that slide is the weight. Drag first, then the push, then move. A second drag value, `brake`, takes over when no key is held, so speeding up and stopping are tuned separately. A value can't use its own table while the table is being built, so `accel` is set on the line after.
