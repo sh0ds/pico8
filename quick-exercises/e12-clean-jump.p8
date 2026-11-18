@@ -1,5 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
+
 __lua__
 
 function _init()
@@ -49,8 +50,17 @@ function _init()
 	drag = 0.2,
 
 	-- slowdown after letting go
-	brake = 0.45
+	brake = 0.45,
+
+    -- short hop check
+    short_hop = false,
+
+    -- coyote time
+    c_max = 5
     }
+
+    -- set coyote timer
+    dot.coyote = dot.c_max
 
     -- speed added per frame
     dot.accel = dot.top_speed * dot.drag
@@ -88,9 +98,14 @@ function dot_movement()
     -- Y
     local grav = g
     if dot.vy > 0 then grav = g * 1.3 end
+    if dot.vy < 0 and not(btn(5)) and dot.short_hop == false then
+        dot.short_hop = true
+        dot.vy /= 2
+    end
     dot.vy += grav
-    if dot.grounded == true and btnp(5) then
+    if dot.coyote > 0 and btnp(5) then
         dot.vy = dot.jump
+        dot.coyote = 0
     end
 
     -- 2. move x
@@ -114,11 +129,14 @@ function dot_movement()
         end
         if dot.vy > 0 then
             dot.grounded = true
+            dot.short_hop = false
+            dot.coyote = dot.c_max
         end
         dot.vy = 0
     else
         dot.y = py
         dot.grounded = false
+        dot.coyote -= 1
     end
 end
 
