@@ -8,6 +8,8 @@ You need [PICO-8](https://www.lexaloffle.com/pico-8.php). Clone this repo, point
 
 - `first-light/` the first cart: a sprite that moves and beeps
 - `jams/` jam kit and jam entries
+- `quick-exercises/` small carts that test out mechanics
+- `room/` a room drawn from map, physics-based movement, collecting things
 
 Playable builds are on itch.io and sh0ds.dev, not in here.
 
