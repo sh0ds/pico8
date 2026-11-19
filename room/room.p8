@@ -7,7 +7,12 @@ function _init()
     tick = 0
 
     -- score
-    score = 0
+    score = {
+        value = 0,
+        color = 7,
+        flash = 10,
+        ft = 0
+    }
 
     dot = {
 	-- radius
@@ -67,15 +72,22 @@ function _update60()
 	for i=#coins,1,-1 do
 		if circ_circ_coll(dot, coins[i]) then
 			deli(coins, i)
-			score += 1
+			score.value += 1
+			score.ft = score.flash
 		end
+	end
+	if score.ft > 0 then
+		score.color = 10
+		score.ft -= 1
+	else
+	    score.color = 7
 	end
 end
 
 function _draw()
 	cls(0)
 	map(0,0,0,0,16,16)
-	print("score: "..score, 86, 10)
+	print("score: "..score.value, 86, 10, score.color)
 	for i=1,#coins do
 		draw_coin(coins[i])
 	end
