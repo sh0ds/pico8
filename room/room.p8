@@ -51,7 +51,10 @@ function _init()
     short_hop = false,
 
     -- coyote time
-    c_max = 5
+    c_max = 5,
+
+    -- color (7 = white)
+    color = 7
     }
 
     -- set coyote timer
@@ -59,6 +62,9 @@ function _init()
 
     -- speed added per frame
     dot.accel = dot.top_speed * dot.drag
+
+    -- width and height for anims
+    dot.w, dot.h = dot.r*2, dot.r*2
 
     -- gravity per frame
     g = .3
@@ -96,14 +102,17 @@ function _init()
             life = 8,
             sx = 1,
             dy = -.5,
-            sy = 1.5
+            sy = .5
         }
     }
 
+    fx_on = true
+    shake = 0
 end
 
 function _update60()
     tick += 1
+    if btnp(4) then fx_on = not(fx_on) end
 	dot_movement()
 	update_parts()
 	for i=#coins,1,-1 do
@@ -122,17 +131,24 @@ function _update60()
 	else
 	    score.color = 7
 	end
+	screen_shake()
 end
 
 function _draw()
 	cls(0)
-	map(0,0,0,0,16,16)
-	print("score: "..score.value, 86, 10, score.color)
-	for i=1,#coins do
+	local ox = rnd(shake) - shake/2
+    local oy = rnd(shake) - shake/2
+    camera(ox, oy)
+    map(0,0,0,0,16,16)
+    for i=1,#coins do
 		draw_coin(coins[i])
 	end
 	draw_parts()
-	circfill(dot.x, dot.y, dot.r, 7)
+	draw_dot()
+	camera(0,0)
+	print("score: "..score.value, 84, 10, score.color)
+	local fx_str = ""
+	print("fx:"..tostr(fx_on), 84, 18, 7)
 end
 
 function dot_movement()
@@ -181,6 +197,7 @@ function dot_movement()
 
     -- 3. move y
     local py = dot.y + dot.vy
+    local fall_speed = dot.vy
     if circ_coll(dot.x, py, dot.r) then
         local step = sgn(dot.vy)
         while not circ_coll(dot.x, dot.y + step, dot.r) do
@@ -196,6 +213,10 @@ function dot_movement()
     dot.grounded = circ_coll(dot.x, dot.y + 1, dot.r)
     if dot.grounded and not(was) then
         sfx(2)
+        if fx_on then
+            if fall_speed > 6 then shake = 6 end
+            dot.h, dot.w = 5, 11
+        end
         spawn_fx(dot.x, dot.y + dot.r, fx.land_dust)
     end
     if dot.grounded then
@@ -204,6 +225,20 @@ function dot_movement()
     else
         dot.coyote -= 1
     end
+
+    -- 5. shape
+    local target_w, target_h = dot.w, dot.h
+    local ease = .3
+    if dot.grounded == true or not(fx_on) then
+        target_w = 2*dot.r
+        target_h = 2*dot.r
+    else
+        local stretch = min(3,abs(dot.vy))
+        target_w = 2*dot.r - stretch
+        target_h = 2*dot.r + stretch
+    end
+    dot.w += (target_w - dot.w) * ease
+    dot.h += (target_h - dot.h) * ease
 end
 
 function is_wall(px, py)
@@ -234,6 +269,7 @@ function draw_coin(c)
 end
 
 function spawn_fx(x, y, fx)
+    if not(fx_on) then return end
     for i=1,fx.n do
         local part = {
             x = x,
@@ -264,6 +300,24 @@ function draw_parts()
     for i=1,#parts do
         local p = parts[i]
         pset(p.x, p.y, p.col)
+    end
+end
+
+function draw_dot()
+    local x0 = dot.x - dot.w/2
+    local x1 = dot.x + dot.w/2
+    local y1 = dot.y + dot.r
+    local y0 = y1 - dot.h
+    ovalfill(x0, y0, x1, y1, dot.color)
+end
+
+function screen_shake()
+    if shake > 0 then
+        if shake < 0.3 then
+            shake = 0
+        else
+            shake = shake * 0.8
+        end
     end
 end
 
