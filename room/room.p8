@@ -135,6 +135,8 @@ function dot_movement()
         dot.x = px
     end
 
+    local was = dot.grounded
+
     -- 3. move y
     local py = dot.y + dot.vy
     if circ_coll(dot.x, py, dot.r) then
@@ -142,16 +144,20 @@ function dot_movement()
         while not circ_coll(dot.x, dot.y + step, dot.r) do
             dot.y += step
         end
-        if dot.vy > 0 then
-        				if dot.grounded == false then sfx(2) end
-            dot.grounded = true
-            dot.short_hop = false
-            dot.coyote = dot.c_max
-        end
         dot.vy = 0
     else
         dot.y = py
-        dot.grounded = false
+    end
+
+    -- 4. ground check
+    dot.grounded = circ_coll(dot.x, dot.y + 1, dot.r)
+    if dot.grounded and not(was) then
+        sfx(2)
+    end
+    if dot.grounded then
+        dot.short_hop = false
+        dot.coyote = dot.c_max
+    else
         dot.coyote -= 1
     end
 end
