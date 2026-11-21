@@ -135,8 +135,6 @@ function dot_movement()
         dot.x = px
     end
 
-    local was = dot.grounded
-
     -- 3. move y
     local py = dot.y + dot.vy
     if circ_coll(dot.x, py, dot.r) then
@@ -150,6 +148,7 @@ function dot_movement()
     end
 
     -- 4. ground check
+    local was = dot.grounded
     dot.grounded = circ_coll(dot.x, dot.y + 1, dot.r)
     if dot.grounded and not(was) then
         sfx(2)
