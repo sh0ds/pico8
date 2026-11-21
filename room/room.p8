@@ -79,10 +79,10 @@ function _init()
 
     fx = {
         jump_smoke = {
-            n = 4,
+            n = 6,
             col = 6,
             life = 12,
-            sx = .2,
+            sx = .3,
             dy = -1,
             sy = .8
         },
@@ -91,7 +91,7 @@ function _init()
             n = 6,
             col = 6,
             life = 12,
-            sx = .2,
+            sx = 1,
             dy = -.1,
             sy = .1
         },
@@ -103,15 +103,26 @@ function _init()
             sx = 1,
             dy = -.5,
             sy = .5
+        },
+
+        trail = {
+            n = 1, sx = 0, dy = 0, sy = 0,
+            life = 12,
+            col = 13,          -- fallback
+            ramp = {13, 5, 1},  -- bright to dark
+            size = 4
         }
     }
 
     fx_on = true
     shake = 0
+    freeze = 0
 end
 
 function _update60()
+    if freeze > 0 then freeze -= 1; return end
     tick += 1
+
     if btnp(4) then fx_on = not(fx_on) end
 	dot_movement()
 	update_parts()
@@ -120,6 +131,7 @@ function _update60()
 		if circ_circ_coll(dot, c) then
 		    spawn_fx(c.x, c.y, fx.coin_burst)
 		    deli(coins, i)
+			if #coins == 0 and fx_on then freeze = 9; shake = 10 end
 			sfx(1)
 			score.value += 1
 			score.ft = score.flash
@@ -136,9 +148,11 @@ end
 
 function _draw()
 	cls(0)
-	local ox = rnd(shake) - shake/2
-    local oy = rnd(shake) - shake/2
-    camera(ox, oy)
+	if freeze == 0 then
+    	local ox = rnd(shake) - shake/2
+        local oy = rnd(shake) - shake/2
+        camera(ox, oy)
+	end
     map(0,0,0,0,16,16)
     for i=1,#coins do
 		draw_coin(coins[i])
@@ -147,8 +161,15 @@ function _draw()
 	draw_dot()
 	camera(0,0)
 	print("score: "..score.value, 84, 10, score.color)
-	local fx_str = ""
 	print("fx:"..tostr(fx_on), 84, 18, 7)
+	if freeze > 6 then
+	    --invert palette ("negative" flash)
+		for i=0,15 do
+		    pal(i, 15-i, 1)
+		end
+	else
+	    pal()
+	end
 end
 
 function dot_movement()
@@ -239,6 +260,7 @@ function dot_movement()
     end
     dot.w += (target_w - dot.w) * ease
     dot.h += (target_h - dot.h) * ease
+    spawn_fx(dot.x, dot.y, fx.trail)
 end
 
 function is_wall(px, py)
@@ -271,13 +293,17 @@ end
 function spawn_fx(x, y, fx)
     if not(fx_on) then return end
     for i=1,fx.n do
+        local l = (rnd(.5) + .5) * fx.life
         local part = {
             x = x,
             y = y,
             dx = rnd(2*fx.sx) - fx.sx,
             dy = rnd(2*fx.sy) - fx.sy + fx.dy,
-            life = (rnd(.5) + .5) * fx.life,
-            col = fx.col
+            life = l,
+            col = fx.col,
+            ramp = fx.ramp,
+            max_life = l,
+            size = fx.size
         }
         add(parts, part)
     end
@@ -299,7 +325,20 @@ end
 function draw_parts()
     for i=1,#parts do
         local p = parts[i]
-        pset(p.x, p.y, p.col)
+        local c = p.col
+        local s = p.size
+        if p.ramp then
+            local used = 1 - p.life / p.max_life
+            local index = min(flr(used * #p.ramp) + 1, #p.ramp)
+            c = p.ramp[index]
+        end
+        if s then
+            local r = s * p.life / p.max_life
+            circfill(p.x, p.y, r, c)
+        else
+            pset(p.x, p.y, c)
+        end
+
     end
 end
 
