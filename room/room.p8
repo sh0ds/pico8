@@ -39,13 +39,13 @@ function _init()
 	top_speed = 2,
 
 	-- slowdown while holding
-	drag = 0.2,
+	drag = .2,
 
 	-- slowdown after letting go
-	brake = 0.45,
+	brake = .45,
 
 	-- slowdown when turning
-	turn = 0.5,
+	turn = .5,
 
     -- short hop check
     short_hop = false,
@@ -61,7 +61,7 @@ function _init()
     dot.accel = dot.top_speed * dot.drag
 
     -- gravity per frame
-    g = 0.3
+    g = .3
 
     coins = {
         {x = 36, y = 72, offset = 0, r = 4},
@@ -69,14 +69,48 @@ function _init()
         {x = 36, y = 16, offset = 23, r = 4}
     }
 
+    parts = {}
+
+    fx = {
+        jump_smoke = {
+            n = 4,
+            col = 6,
+            life = 12,
+            sx = .2,
+            dy = -1,
+            sy = .8
+        },
+
+        land_dust = {
+            n = 6,
+            col = 6,
+            life = 12,
+            sx = .2,
+            dy = -.1,
+            sy = .1
+        },
+
+        coin_burst = {
+            n = 8,
+            col = 10,
+            life = 8,
+            sx = 1,
+            dy = -.5,
+            sy = 1.5
+        }
+    }
+
 end
 
 function _update60()
     tick += 1
 	dot_movement()
+	update_parts()
 	for i=#coins,1,-1 do
-		if circ_circ_coll(dot, coins[i]) then
-			deli(coins, i)
+	    local c = coins[i]
+		if circ_circ_coll(dot, c) then
+		    spawn_fx(c.x, c.y, fx.coin_burst)
+		    deli(coins, i)
 			sfx(1)
 			score.value += 1
 			score.ft = score.flash
@@ -97,6 +131,7 @@ function _draw()
 	for i=1,#coins do
 		draw_coin(coins[i])
 	end
+	draw_parts()
 	circfill(dot.x, dot.y, dot.r, 7)
 end
 
@@ -111,6 +146,9 @@ function dot_movement()
 
     local d = dot.drag
     if dir == 0 then d = dot.brake end
+    if dir * dot.vx < 0 then
+        d = dot.turn
+    end
     dot.vx -= dot.vx * d
     dot.vx += dir * dot.accel
 
@@ -124,6 +162,7 @@ function dot_movement()
     dot.vy += grav
     if dot.coyote > 0 and btnp(5) then
         sfx(0)
+        spawn_fx(dot.x, dot.y + dot.r, fx.jump_smoke)
         dot.vy = dot.jump
         dot.coyote = 0
     end
@@ -157,6 +196,7 @@ function dot_movement()
     dot.grounded = circ_coll(dot.x, dot.y + 1, dot.r)
     if dot.grounded and not(was) then
         sfx(2)
+        spawn_fx(dot.x, dot.y + dot.r, fx.land_dust)
     end
     if dot.grounded then
         dot.short_hop = false
@@ -191,6 +231,40 @@ function draw_coin(c)
     local y0 = (sin((tick  + c.offset) / 80) * 2) + c.y - c.r
     local y1 = (sin((tick  + c.offset) / 80) * 2) + c.y + c.r
     ovalfill(x0, y0, x1, y1, 10)
+end
+
+function spawn_fx(x, y, fx)
+    for i=1,fx.n do
+        local part = {
+            x = x,
+            y = y,
+            dx = rnd(2*fx.sx) - fx.sx,
+            dy = rnd(2*fx.sy) - fx.sy + fx.dy,
+            life = (rnd(.5) + .5) * fx.life,
+            col = fx.col
+        }
+        add(parts, part)
+    end
+end
+
+function update_parts()
+	for i=#parts,1,-1 do
+	    local p = parts[i]
+	    if p.life > 0 then
+    	    p.x += p.dx
+    		p.y += p.dy
+            p.life -= 1
+        else
+            deli(parts, i)
+		end
+	end
+end
+
+function draw_parts()
+    for i=1,#parts do
+        local p = parts[i]
+        pset(p.x, p.y, p.col)
+    end
 end
 
 __gfx__
@@ -237,4 +311,3 @@ __music__
 02 08054644
 00 04054744
 00 08054344
-
